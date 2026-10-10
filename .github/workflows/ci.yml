@@ -48,6 +48,14 @@ jobs:
           cp -L result*/nixos-* dist/
           ls -l dist
 
+      # GitHub rejects release assets of 2 GiB or more.
+      - name: Check image sizes
+        run: |
+          if find dist -type f -size +2G | grep .; then
+            echo "::error::Images must be under 2 GiB to attach to a release"
+            exit 1
+          fi
+
       - name: Upload images
         uses: actions/upload-artifact@v7
         with:
