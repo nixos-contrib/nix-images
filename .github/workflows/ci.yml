@@ -25,21 +25,24 @@ jobs:
       - name: Install Nix
         uses: DeterminateSystems/nix-installer-action@v23
 
-      - name: Build image
-        run: nix build .#digital-ocean --print-build-logs
+      - name: Build images
+        run: |
+          nix eval --json .#packages.x86_64-linux --apply builtins.attrNames |
+            jq -r '.[] | ".#" + .' |
+            xargs nix build --print-build-logs
 
-      - name: Collect image
+      - name: Collect images
         run: |
           mkdir dist
-          cp -L result/*.qcow2.gz dist/
+          cp -L result*/nixos-* dist/
           cd dist
-          sha256sum -- *.qcow2.gz > SHA256SUMS
+          sha256sum -- nixos-* > SHA256SUMS
           cat SHA256SUMS
 
-      - name: Upload image
+      - name: Upload images
         uses: actions/upload-artifact@v7
         with:
-          name: nixos-digital-ocean
+          name: images
           path: dist/
 
   release:
@@ -64,7 +67,7 @@ jobs:
           target-branch: main
 
   # Releases created with GITHUB_TOKEN don't trigger other workflows, so the
-  # image built above is attached here rather than on a tag push.
+  # images built above is attached here rather than on a tag push.
   publish:
     needs: release
     if: needs.release.outputs.release_created
@@ -73,13 +76,13 @@ jobs:
       contents: write
     timeout-minutes: 15
     steps:
-      - name: Download image
+      - name: Download images
         uses: actions/download-artifact@v8
         with:
-          name: nixos-digital-ocean
+          name: images
           path: dist
 
-      - name: Attach image to release
+      - name: Attach images to release
         env:
           GH_TOKEN: ${{ github.token }}
           TAG: ${{ needs.release.outputs.tag_name }}

@@ -1,15 +1,14 @@
 # nixos-image
 
-Base NixOS image for DigitalOcean droplets, built by GitHub Actions and
-published as a GitHub release asset.
+Base NixOS images for cloud providers, built by GitHub Actions and published
+as GitHub release assets. Currently: DigitalOcean.
 
 ## Releasing
 
 Releases are managed by [release-please](https://github.com/googleapis/release-please)
 from [Conventional Commits](https://www.conventionalcommits.org/). Every push to
-`main` builds the image; release-please keeps a release PR open, and merging it
-tags a release and attaches `nixos-digital-ocean-x86_64-linux.qcow2.gz` and
-`SHA256SUMS` to it:
+`main` builds the images; release-please keeps a release PR open, and merging
+it tags a release and attaches every image plus `SHA256SUMS` to it:
 
 ```
 https://github.com/nixos-contrib/nixos-image/releases/download/<tag>/nixos-digital-ocean-x86_64-linux.qcow2.gz
@@ -28,9 +27,16 @@ nix build .#digital-ocean
 
 ## Customizing
 
-Edit [configuration.nix](configuration.nix). The image imports nixpkgs'
-`digital-ocean-image.nix` module, which configures networking, the hostname and
-root SSH keys from the droplet metadata service and enables `do-agent`.
+[configuration.nix](configuration.nix) is shared by every image. Each file in
+[images](images) is a variant that imports the matching nixpkgs image module,
+e.g. [images/digital-ocean.nix](images/digital-ocean.nix) uses
+`digital-ocean-image.nix`, which configures networking, the hostname and root
+SSH keys from the droplet metadata service and enables `do-agent`.
+
+To add a provider, create `images/<variant>.nix` importing one of the modules
+listed in nixpkgs'
+[images.nix](https://github.com/NixOS/nixpkgs/blob/nixos-26.05/nixos/modules/image/images.nix).
+It's picked up as `.#<variant>` and released as `nixos-<variant>-x86_64-linux.*`.
 
 ## Provisioning with Terraform
 
