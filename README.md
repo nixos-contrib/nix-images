@@ -8,11 +8,11 @@ published as a GitHub release asset.
 Releases are managed by [release-please](https://github.com/googleapis/release-please)
 from [Conventional Commits](https://www.conventionalcommits.org/). Every push to
 `main` builds the image; release-please keeps a release PR open, and merging it
-tags a release and attaches `nixos-digitalocean-x86_64-linux.qcow2.gz` and
+tags a release and attaches `nixos-digital-ocean-x86_64-linux.qcow2.gz` and
 `SHA256SUMS` to it:
 
 ```
-https://github.com/nixos-contrib/nixos-image/releases/download/<tag>/nixos-digitalocean-x86_64-linux.qcow2.gz
+https://github.com/nixos-contrib/nixos-image/releases/download/<tag>/nixos-digital-ocean-x86_64-linux.qcow2.gz
 ```
 
 nixpkgs is bumped weekly by an auto-merged `chore(flake)` PR; those commits
@@ -23,7 +23,7 @@ don't cut a release on their own.
 Needs an `x86_64-linux` machine or remote builder:
 
 ```sh
-nix build .#digitalocean
+nix build .#digital-ocean
 ```
 
 ## Customizing
@@ -41,5 +41,5 @@ downloadable.
 Once a droplet is running, manage it from the flake, for example:
 
 ```sh
-nixos-rebuild switch --flake .#digitalocean --target-host root@<ip>
+nixos-rebuild switch --flake .#digital-ocean --target-host root@<ip>
 ```

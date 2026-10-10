@@ -5,7 +5,7 @@
   imports = [ "${modulesPath}/virtualisation/digital-ocean-image.nix" ];
 
   # Stable file name so the release asset URL is predictable.
-  image.baseName = "nixos-digitalocean-${pkgs.stdenv.hostPlatform.system}";
+  image.baseName = "nixos-digital-ocean-${pkgs.stdenv.hostPlatform.system}";
 
   nix.settings.experimental-features = [
     "nix-command"

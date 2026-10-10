@@ -9,13 +9,13 @@
       system = "x86_64-linux";
     in
     {
-      nixosConfigurations.digitalocean = nixpkgs.lib.nixosSystem {
+      nixosConfigurations.digital-ocean = nixpkgs.lib.nixosSystem {
         inherit system;
         modules = [ ./configuration.nix ];
       };
       packages.${system} = {
-        digitalocean = self.nixosConfigurations.digitalocean.config.system.build.digitalOceanImage;
-        default = self.packages.${system}.digitalocean;
+        digital-ocean = self.nixosConfigurations.digital-ocean.config.system.build.digitalOceanImage;
+        default = self.packages.${system}.digital-ocean;
       };
     };
 }

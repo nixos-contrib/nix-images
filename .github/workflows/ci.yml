@@ -26,7 +26,7 @@ jobs:
         uses: DeterminateSystems/nix-installer-action@v23
 
       - name: Build image
-        run: nix build .#digitalocean --print-build-logs
+        run: nix build .#digital-ocean --print-build-logs
 
       - name: Collect image
         run: |
@@ -39,7 +39,7 @@ jobs:
       - name: Upload image
         uses: actions/upload-artifact@v7
         with:
-          name: nixos-digitalocean
+          name: nixos-digital-ocean
           path: dist/
 
   release:
@@ -76,7 +76,7 @@ jobs:
       - name: Download image
         uses: actions/download-artifact@v8
         with:
-          name: nixos-digitalocean
+          name: nixos-digital-ocean
           path: dist
 
       - name: Attach image to release

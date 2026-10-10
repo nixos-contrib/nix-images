@@ -27,7 +27,7 @@ variable "ssh_key_fingerprint" {
 # replaces the image explicitly.
 resource "digitalocean_custom_image" "nixos" {
   name         = "nixos-${var.image_version}"
-  url          = "https://github.com/nixos-contrib/nixos-image/releases/download/${var.image_version}/nixos-digitalocean-x86_64-linux.qcow2.gz"
+  url          = "https://github.com/nixos-contrib/nixos-image/releases/download/${var.image_version}/nixos-digital-ocean-x86_64-linux.qcow2.gz"
   regions      = [var.region]
   distribution = "Unknown"
 }
