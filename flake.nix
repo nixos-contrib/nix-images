@@ -13,7 +13,7 @@
 
       # Variants not listed here are built for x86_64-linux only.
       variantSystems = {
-        oracle = [
+        oraclecloud = [
           "x86_64-linux"
           "aarch64-linux"
         ];
@@ -34,7 +34,7 @@
         };
 
       # The x86_64-linux configuration keeps the plain variant name; other
-      # systems get a suffix, e.g. oracle-aarch64-linux.
+      # systems get a suffix, e.g. oraclecloud-aarch64-linux.
       configName = variant: system: if system == "x86_64-linux" then variant else "${variant}-${system}";
     in
     {

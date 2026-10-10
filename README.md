@@ -4,12 +4,12 @@
 [![Release](https://img.shields.io/github/v/release/nixos-contrib/nix-images)](https://github.com/nixos-contrib/nix-images/releases/latest)
 [![NixOS 26.05](https://img.shields.io/badge/NixOS-26.05-5277C3?logo=nixos&logoColor=white)](https://nixos.org)
 [![DigitalOcean](https://img.shields.io/badge/DigitalOcean-custom%20image-0080FF?logo=digitalocean&logoColor=white)](deployment/terraform/modules/digitalocean)
-[![Oracle Cloud](https://img.shields.io/badge/Oracle%20Cloud-x86__64%20%7C%20Arm-C74634?logo=oracle&logoColor=white)](#oracle-cloud)
+[![Oracle Cloud](https://img.shields.io/badge/Oracle%20Cloud-x86__64%20%7C%20Arm-C74634?logo=oracle&logoColor=white)](deployment/terraform/modules/oraclecloud)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 Run NixOS on DigitalOcean and Oracle Cloud without `nixos-infect`. Every
-release ships prebuilt NixOS images, plus a Terraform module that turns the
-DigitalOcean image into a droplet.
+release ships prebuilt NixOS images, plus Terraform modules that import them
+as custom images.
 
 ## Quick start
 
@@ -54,11 +54,28 @@ Each release also has a `SHA256SUMS` file for checking the download.
 ## Oracle Cloud
 
 Oracle images are built for both `x86_64-linux` and `aarch64-linux`, so they
-run on the Always Free Ampere A1 (Arm) and E2.1.Micro (AMD) shapes:
+run on the Always Free Ampere A1 (Arm) and E2.1.Micro (AMD) shapes. The
+[oraclecloud module](deployment/terraform/modules/oraclecloud) uploads and
+imports the image for you:
+
+```hcl
+module "oraclecloud_nixos_image" {
+  source = "github.com/nixos-contrib/nix-images//deployment/terraform/modules/oraclecloud?ref=v0.1.0"
+
+  compartment_id = var.compartment_id
+  bucket         = "nixos-images"
+  system         = "aarch64-linux"
+}
+```
+
+Use `module.oraclecloud_nixos_image.id` as the instance's `source_id`; see the
+[complete example](deployment/terraform/modules/oraclecloud/examples/basic),
+which creates the network and an A1 instance. To import by hand instead, use
+the release URL:
 
 ```
-https://github.com/nixos-contrib/nix-images/releases/download/<tag>/nixos-oracle-aarch64-linux.qcow2
-https://github.com/nixos-contrib/nix-images/releases/download/<tag>/nixos-oracle-x86_64-linux.qcow2
+https://github.com/nixos-contrib/nix-images/releases/download/<tag>/nixos-oraclecloud-aarch64-linux.qcow2
+https://github.com/nixos-contrib/nix-images/releases/download/<tag>/nixos-oraclecloud-x86_64-linux.qcow2
 ```
 
 1. Upload the `.qcow2` to an Object Storage bucket.
@@ -73,10 +90,10 @@ SSH key from the instance metadata. The root partition grows to fill the boot
 volume on first boot. On an A1 instance, manage the system with:
 
 ```sh
-nixos-rebuild switch --flake .#oracle-aarch64-linux --target-host root@<ip>
+nixos-rebuild switch --flake .#oraclecloud-aarch64-linux --target-host root@<ip>
 ```
 
-Use `.#oracle` for the x86_64 image.
+Use `.#oraclecloud` for the x86_64 image.
 
 ## What's in the images
 
@@ -110,7 +127,7 @@ system:
 
 ```sh
 nix build .#digitalocean
-nix build .#packages.aarch64-linux.oracle
+nix build .#packages.aarch64-linux.oraclecloud
 ```
 
 ## Releasing
