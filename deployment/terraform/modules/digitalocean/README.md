@@ -12,7 +12,7 @@ module "digitalocean_nixos_image" {
 }
 
 resource "digitalocean_droplet" "nixos" {
-  image = module.digitalocean_nixos_image.image_id
+  image = module.digitalocean_nixos_image.id
   # ...
 
   lifecycle {
@@ -46,4 +46,4 @@ it any droplet whose `image` isn't ignored as above. Droplets are updated with
 
 | Name | Description |
 |---|---|
-| `image_id` | ID of the custom image, for `digitalocean_droplet.image` |
+| `id` | ID of the custom image, for `digitalocean_droplet.image` |

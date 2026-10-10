@@ -20,7 +20,7 @@ module "digitalocean_nixos_image" {
 
 resource "digitalocean_droplet" "nixos" {
   name     = "nixos"
-  image    = module.digitalocean_nixos_image.image_id
+  image    = module.digitalocean_nixos_image.id
   region   = "fra1"
   size     = "s-1vcpu-1gb"
   ssh_keys = [var.ssh_key_fingerprint]
