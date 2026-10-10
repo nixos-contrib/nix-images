@@ -15,34 +15,43 @@ permissions:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-    timeout-minutes: 60
+    strategy:
+      matrix:
+        include:
+          - system: x86_64-linux
+            runner: ubuntu-latest
+          - system: aarch64-linux
+            runner: ubuntu-24.04-arm
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 90
     steps:
       - name: Checkout
         uses: actions/checkout@v7
 
       # Also enables KVM, which make-disk-image uses to install the system.
+      # Arm runners have no /dev/kvm, so the kvm feature is declared anyway and
+      # QEMU falls back to software emulation there.
       - name: Install Nix
         uses: DeterminateSystems/nix-installer-action@v23
+        with:
+          extra-conf: extra-system-features = kvm
 
       - name: Build images
         run: |
-          nix eval --json .#packages.x86_64-linux --apply builtins.attrNames |
-            jq -r '.[] | ".#" + .' |
+          nix eval --json .#packages.${{ matrix.system }} --apply builtins.attrNames |
+            jq -r '.[] | ".#packages.${{ matrix.system }}." + .' |
             xargs nix build --print-build-logs
 
       - name: Collect images
         run: |
           mkdir dist
           cp -L result*/nixos-* dist/
-          cd dist
-          sha256sum -- nixos-* > SHA256SUMS
-          cat SHA256SUMS
+          ls -l dist
 
       - name: Upload images
         uses: actions/upload-artifact@v7
         with:
-          name: images
+          name: images-${{ matrix.system }}
           path: dist/
 
   release:
@@ -67,7 +76,7 @@ jobs:
           target-branch: main
 
   # Releases created with GITHUB_TOKEN don't trigger other workflows, so the
-  # images built above is attached here rather than on a tag push.
+  # images built above are attached here rather than on a tag push.
   publish:
     needs: release
     if: needs.release.outputs.release_created
@@ -79,8 +88,15 @@ jobs:
       - name: Download images
         uses: actions/download-artifact@v8
         with:
-          name: images
+          pattern: images-*
+          merge-multiple: true
           path: dist
+
+      - name: Checksum images
+        working-directory: dist
+        run: |
+          sha256sum -- nixos-* > SHA256SUMS
+          cat SHA256SUMS
 
       - name: Attach images to release
         env:
