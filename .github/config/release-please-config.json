@@ -7,6 +7,10 @@
         {
           "type": "generic",
           "path": "deployment/terraform/modules/digitalocean/variables.tf"
+        },
+        {
+          "type": "generic",
+          "path": "deployment/terraform/modules/oraclecloud/variables.tf"
         }
       ]
     }
