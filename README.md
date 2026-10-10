@@ -4,6 +4,7 @@
 [![Release](https://img.shields.io/github/v/release/nixos-contrib/nix-images)](https://github.com/nixos-contrib/nix-images/releases/latest)
 [![NixOS 26.05](https://img.shields.io/badge/NixOS-26.05-5277C3?logo=nixos&logoColor=white)](https://nixos.org)
 [![DigitalOcean](https://img.shields.io/badge/DigitalOcean-custom%20image-0080FF?logo=digitalocean&logoColor=white)](deployment/terraform/modules/digitalocean)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 Run NixOS on DigitalOcean without `nixos-infect`. Every release ships a
 prebuilt NixOS image, plus a Terraform module that turns it into a droplet.
