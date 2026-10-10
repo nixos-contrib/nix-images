@@ -11,7 +11,7 @@ from [Conventional Commits](https://www.conventionalcommits.org/). Every push to
 it tags a release and attaches every image plus `SHA256SUMS` to it:
 
 ```
-https://github.com/nixos-contrib/nix-images/releases/download/<tag>/nixos-digital-ocean-x86_64-linux.qcow2.gz
+https://github.com/nixos-contrib/nix-images/releases/download/<tag>/nixos-digitalocean-x86_64-linux.qcow2.gz
 ```
 
 nixpkgs is bumped weekly by an auto-merged `chore(flake)` PR; those commits
@@ -22,14 +22,14 @@ don't cut a release on their own.
 Needs an `x86_64-linux` machine or remote builder:
 
 ```sh
-nix build .#digital-ocean
+nix build .#digitalocean
 ```
 
 ## Customizing
 
 [configuration.nix](configuration.nix) is shared by every image. Each file in
 [images](images) is a variant that imports the matching nixpkgs image module,
-e.g. [images/digital-ocean.nix](images/digital-ocean.nix) uses
+e.g. [images/digitalocean.nix](images/digitalocean.nix) uses
 `digital-ocean-image.nix`, which configures networking, the hostname and root
 SSH keys from the droplet metadata service and enables `do-agent`.
 
@@ -40,12 +40,12 @@ It's picked up as `.#<variant>` and released as `nixos-<variant>-x86_64-linux.*`
 
 ## Provisioning with Terraform
 
-[deployment/terraform/modules/digital-ocean](deployment/terraform/modules/digital-ocean)
+[deployment/terraform/modules/digitalocean](deployment/terraform/modules/digitalocean)
 uploads a released image to DigitalOcean as a custom image. DigitalOcean fetches
 it from the release URL, so the release asset has to be publicly downloadable.
 
 Once a droplet is running, manage it from the flake, for example:
 
 ```sh
-nixos-rebuild switch --flake .#digital-ocean --target-host root@<ip>
+nixos-rebuild switch --flake .#digitalocean --target-host root@<ip>
 ```

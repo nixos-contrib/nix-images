@@ -6,7 +6,7 @@
       "extra-files": [
         {
           "type": "generic",
-          "path": "deployment/terraform/modules/digital-ocean/variables.tf"
+          "path": "deployment/terraform/modules/digitalocean/variables.tf"
         }
       ]
     }
