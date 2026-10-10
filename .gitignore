@@ -1,6 +1,2 @@
 result
 result-*
-.terraform/
-.terraform.lock.hcl
-*.tfstate
-*.tfstate.*
