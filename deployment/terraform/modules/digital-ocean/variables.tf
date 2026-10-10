@@ -1,5 +1,5 @@
 variable "image_version" {
-  description = "Release tag of nixos-contrib/nixos-image to upload. Defaults to the release this module was published with."
+  description = "Release tag of nixos-contrib/nix-images to upload. Defaults to the release this module was published with."
   type        = string
   default     = "v0.1.0" # x-release-please-version
 }

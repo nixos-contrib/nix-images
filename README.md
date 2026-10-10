@@ -1,4 +1,4 @@
-# nixos-image
+# nix-images
 
 Base NixOS images for cloud providers, built by GitHub Actions and published
 as GitHub release assets. Currently: DigitalOcean.
@@ -11,7 +11,7 @@ from [Conventional Commits](https://www.conventionalcommits.org/). Every push to
 it tags a release and attaches every image plus `SHA256SUMS` to it:
 
 ```
-https://github.com/nixos-contrib/nixos-image/releases/download/<tag>/nixos-digital-ocean-x86_64-linux.qcow2.gz
+https://github.com/nixos-contrib/nix-images/releases/download/<tag>/nixos-digital-ocean-x86_64-linux.qcow2.gz
 ```
 
 nixpkgs is bumped weekly by an auto-merged `chore(flake)` PR; those commits
