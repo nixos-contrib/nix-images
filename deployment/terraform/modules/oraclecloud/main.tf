@@ -17,10 +17,10 @@ data "oci_objectstorage_namespace" "this" {
 # Oracle only imports images from Object Storage, and oci_objectstorage_object
 # needs the file on disk at plan time. Instead, a short-lived write-only URL
 # lets curl stream the release image into the bucket once, at apply time.
-resource "oci_objectstorage_preauthrequest" "upload" {
+resource "oci_objectstorage_preauthrequest" "storage" {
   namespace    = data.oci_objectstorage_namespace.this.namespace
   bucket       = var.bucket
-  name         = "upload-${local.object_name}"
+  name         = local.object_name
   object_name  = local.object_name
   access_type  = "ObjectWrite"
   time_expires = timeadd(timestamp(), "2h")
@@ -30,8 +30,8 @@ resource "oci_objectstorage_preauthrequest" "upload" {
   }
 }
 
-resource "terraform_data" "upload" {
-  triggers_replace = [oci_objectstorage_preauthrequest.upload.id]
+resource "terraform_data" "image" {
+  triggers_replace = [oci_objectstorage_preauthrequest.storage.id]
 
   provisioner "local-exec" {
     command = <<-EOT
@@ -45,7 +45,7 @@ resource "terraform_data" "upload" {
     # Passed through the environment so the upload URL isn't logged.
     environment = {
       IMAGE_URL  = local.image_url
-      UPLOAD_URL = oci_objectstorage_preauthrequest.upload.full_path
+      UPLOAD_URL = oci_objectstorage_preauthrequest.storage.full_path
     }
   }
 }
@@ -65,7 +65,7 @@ resource "oci_core_image" "this" {
     operating_system  = "NixOS"
   }
 
-  depends_on = [terraform_data.upload]
+  depends_on = [terraform_data.image]
 }
 
 resource "oci_core_shape_management" "this" {
