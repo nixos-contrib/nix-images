@@ -40,9 +40,9 @@ It's picked up as `.#<variant>` and released as `nixos-<variant>-x86_64-linux.*`
 
 ## Provisioning with Terraform
 
-See [examples/terraform](examples/terraform/main.tf). DigitalOcean fetches the
-image from the release URL, so the release asset has to be publicly
-downloadable.
+[deployment/terraform/modules/digital-ocean](deployment/terraform/modules/digital-ocean)
+uploads a released image to DigitalOcean as a custom image. DigitalOcean fetches
+it from the release URL, so the release asset has to be publicly downloadable.
 
 Once a droplet is running, manage it from the flake, for example:
 

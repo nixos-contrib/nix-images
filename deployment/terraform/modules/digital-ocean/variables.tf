@@ -1,0 +1,22 @@
+variable "image_version" {
+  description = "Release tag of nixos-contrib/nixos-image to upload. Defaults to the release this module was published with."
+  type        = string
+  default     = "v0.1.0" # x-release-please-version
+}
+
+variable "regions" {
+  description = "Regions to make the image available in, e.g. [\"fra1\"]."
+  type        = list(string)
+}
+
+variable "name" {
+  description = "Image name. Defaults to nixos-<image_version>."
+  type        = string
+  default     = null
+}
+
+variable "tags" {
+  description = "Tags to apply to the image."
+  type        = list(string)
+  default     = []
+}

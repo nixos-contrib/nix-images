@@ -1,0 +1,21 @@
+terraform {
+  required_version = ">= 1.3"
+
+  required_providers {
+    digitalocean = {
+      source  = "digitalocean/digitalocean"
+      version = "~> 2.0"
+    }
+  }
+}
+
+# DigitalOcean downloads the image from the release URL and stores it as a
+# custom image in each region.
+resource "digitalocean_custom_image" "this" {
+  name         = coalesce(var.name, "nixos-${var.image_version}")
+  url          = "https://github.com/nixos-contrib/nixos-image/releases/download/${var.image_version}/nixos-digital-ocean-x86_64-linux.qcow2.gz"
+  regions      = var.regions
+  distribution = "Unknown"
+  description  = "NixOS ${var.image_version} from nixos-contrib/nixos-image"
+  tags         = var.tags
+}
