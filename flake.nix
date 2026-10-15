@@ -13,6 +13,10 @@
 
       # Variants not listed here are built for x86_64-linux only.
       variantSystems = {
+        hetznercloud = [
+          "x86_64-linux"
+          "aarch64-linux"
+        ];
         oraclecloud = [
           "x86_64-linux"
           "aarch64-linux"
