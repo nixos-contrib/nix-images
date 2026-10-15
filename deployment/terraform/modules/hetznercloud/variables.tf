@@ -1,7 +1,6 @@
 variable "system" {
-  description = "Image architecture: aarch64-linux for Arm (CAX) server types, x86_64-linux for x86 (CX, CPX, CCX) server types."
+  description = "Image architecture, matching the server type: aarch64-linux for Arm (CAX), x86_64-linux for x86 (CX, CPX, CCX)."
   type        = string
-  default     = "aarch64-linux"
   nullable    = false
 
   validation {

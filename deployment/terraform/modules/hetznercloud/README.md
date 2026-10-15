@@ -30,6 +30,10 @@ disk, snapshots it and deletes the server. An upload takes a few minutes and
 bills the temporary server for that time. The provider reads the API token from
 `HCLOUD_TOKEN`, like the `hcloud` provider.
 
+`system` must match the server type's architecture: `aarch64-linux` for Arm
+(CAX) servers, `x86_64-linux` for x86 (CX, CPX, CCX) servers. Hetzner refuses
+to create a server from a snapshot of the other architecture.
+
 `image_version` defaults to the release the module is pinned to, so bumping
 `ref` upgrades the image too. A new version replaces the snapshot, and with it
 any server whose `image` isn't ignored as above. Servers are updated with
@@ -46,7 +50,7 @@ any server whose `image` isn't ignored as above. Servers are updated with
 
 | Name | Description | Type | Default |
 |---|---|---|---|
-| `system` | `aarch64-linux` or `x86_64-linux` | `string` | `aarch64-linux` |
+| `system` | `aarch64-linux` or `x86_64-linux`, matching the server type | `string` | required |
 | `image_version` | Release tag to upload | `string` | the module's release |
 | `name` | Snapshot description | `string` | `nixos-<image_version>-<system>` |
 | `location` | Location of the temporary upload server | `string` | `fsn1` |
