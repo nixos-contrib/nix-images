@@ -10,6 +10,10 @@
         },
         {
           "type": "generic",
+          "path": "deployment/terraform/modules/hetznercloud/variables.tf"
+        },
+        {
+          "type": "generic",
           "path": "deployment/terraform/modules/oraclecloud/variables.tf"
         }
       ]

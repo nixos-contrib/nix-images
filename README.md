@@ -4,7 +4,7 @@
 [![Release](https://img.shields.io/github/v/release/nixos-contrib/nix-images)](https://github.com/nixos-contrib/nix-images/releases/latest)
 [![NixOS 26.05](https://img.shields.io/badge/NixOS-26.05-5277C3?logo=nixos&logoColor=white)](https://nixos.org)
 [![DigitalOcean](https://img.shields.io/badge/DigitalOcean-custom%20image-0080FF?logo=digitalocean&logoColor=white)](deployment/terraform/modules/digitalocean)
-[![Hetzner Cloud](https://img.shields.io/badge/Hetzner%20Cloud-x86__64%20%7C%20Arm-D50C2D?logo=hetzner&logoColor=white)](#hetzner-cloud)
+[![Hetzner Cloud](https://img.shields.io/badge/Hetzner%20Cloud-x86__64%20%7C%20Arm-D50C2D?logo=hetzner&logoColor=white)](deployment/terraform/modules/hetznercloud)
 [![Oracle Cloud](https://img.shields.io/badge/Oracle%20Cloud-x86__64%20%7C%20Arm-C74634?logo=oracle&logoColor=white)](deployment/terraform/modules/oraclecloud)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
@@ -56,20 +56,34 @@ Each release also has a `SHA256SUMS` file for checking the download.
 
 Hetzner images are built for both `x86_64-linux` and `aarch64-linux`, so they
 run on the x86 (CX, CPX, CCX) and Arm (CAX) server types. Hetzner can't import
-images directly, so upload one with
-[hcloud-upload-image](https://github.com/apricote/hcloud-upload-image). It
-writes the image to a temporary server and saves it as a snapshot:
+images directly, so the
+[hetznercloud module](deployment/terraform/modules/hetznercloud) writes the
+image to a temporary server and saves it as a snapshot:
+
+```hcl
+module "hetznercloud_nixos_image" {
+  source = "github.com/nixos-contrib/nix-images//deployment/terraform/modules/hetznercloud?ref=v0.1.0"
+
+  system = "aarch64-linux"
+}
+```
+
+Use `module.hetznercloud_nixos_image.id` as the server's `image`; see the
+[complete example](deployment/terraform/modules/hetznercloud/examples/basic),
+which creates a CAX11 server. To upload by hand instead, use
+[hcloud-upload-image](https://github.com/apricote/hcloud-upload-image) with the
+release URL:
 
 ```sh
 export HCLOUD_TOKEN=...
 hcloud-upload-image upload \
-  --image-url https://github.com/nixos-contrib/nix-images/releases/download/<tag>/nixos-hetznercloud-aarch64-linux.img.zst \
-  --compression zstd \
+  --image-url https://github.com/nixos-contrib/nix-images/releases/download/<tag>/nixos-hetznercloud-aarch64-linux.raw.xz \
+  --compression xz \
   --architecture arm \
   --labels os=nixos
 ```
 
-For the x86 image, use `nixos-hetznercloud-x86_64-linux.img.zst` with
+For the x86 image, use `nixos-hetznercloud-x86_64-linux.raw.xz` with
 `--architecture x86`. Then create a server from the snapshot with your SSH key:
 
 ```sh
