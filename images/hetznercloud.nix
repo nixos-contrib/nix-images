@@ -14,8 +14,6 @@
   ];
 
   # Hetzner boots x86 servers with BIOS and Arm (CAX) servers with UEFI only.
-  # Hetzner can't import images directly; hcloud-upload-image writes the raw
-  # image to a server's disk and snapshots it.
   image.format = "raw";
   image.efiSupport = pkgs.stdenv.hostPlatform.isAarch64;
   boot.loader.grub.devices = lib.mkIf (!config.image.efiSupport) [ "/dev/sda" ];
@@ -37,16 +35,20 @@
     };
   };
 
-  # Keeps the release asset small; hcloud-upload-image decompresses it with
-  # --compression zstd.
-  image.extension = lib.mkForce "img.zst";
+  # Hetzner can't import images directly. The imager Terraform provider and
+  # hcloud-upload-image write the image to a temporary server's disk and
+  # snapshot it; the provider only accepts xz-compressed raw images.
+  image.extension = lib.mkForce "raw.xz";
   system.build.image = lib.mkForce (
     import "${modulesPath}/../lib/make-disk-image.nix" {
       inherit config lib pkgs;
       inherit (config.virtualisation) diskSize;
       inherit (config.image) baseName format;
       partitionTableType = if config.image.efiSupport then "efi" else "legacy";
-      postVM = "${pkgs.zstd}/bin/zstd -T0 --rm $diskImage";
+      postVM = ''
+        ${pkgs.xz}/bin/xz -T0 --stdout $diskImage > $out/${config.image.filePath}
+        rm $diskImage
+      '';
     }
   );
 }
