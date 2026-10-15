@@ -4,12 +4,13 @@
 [![Release](https://img.shields.io/github/v/release/nixos-contrib/nix-images)](https://github.com/nixos-contrib/nix-images/releases/latest)
 [![NixOS 26.05](https://img.shields.io/badge/NixOS-26.05-5277C3?logo=nixos&logoColor=white)](https://nixos.org)
 [![DigitalOcean](https://img.shields.io/badge/DigitalOcean-custom%20image-0080FF?logo=digitalocean&logoColor=white)](deployment/terraform/modules/digitalocean)
+[![Hetzner Cloud](https://img.shields.io/badge/Hetzner%20Cloud-x86__64%20%7C%20Arm-D50C2D?logo=hetzner&logoColor=white)](deployment/terraform/modules/hetznercloud)
 [![Oracle Cloud](https://img.shields.io/badge/Oracle%20Cloud-x86__64%20%7C%20Arm-C74634?logo=oracle&logoColor=white)](deployment/terraform/modules/oraclecloud)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-Run NixOS on DigitalOcean and Oracle Cloud without `nixos-infect`. Every
-release ships prebuilt NixOS images, plus Terraform modules that import them
-as custom images.
+Run NixOS on DigitalOcean, Hetzner Cloud and Oracle Cloud without
+`nixos-infect`. Every release ships prebuilt NixOS images, plus Terraform
+modules that import them as custom images.
 
 ## Quick start
 
@@ -50,6 +51,55 @@ https://github.com/nixos-contrib/nix-images/releases/download/<tag>/nixos-digita
 ```
 
 Each release also has a `SHA256SUMS` file for checking the download.
+
+## Hetzner Cloud
+
+Hetzner images are built for both `x86_64-linux` and `aarch64-linux`, so they
+run on the x86 (CX, CPX, CCX) and Arm (CAX) server types. Hetzner can't import
+images directly, so the
+[hetznercloud module](deployment/terraform/modules/hetznercloud) writes the
+image to a temporary server and saves it as a snapshot:
+
+```hcl
+module "hetznercloud_nixos_image" {
+  source = "github.com/nixos-contrib/nix-images//deployment/terraform/modules/hetznercloud?ref=v0.1.0"
+
+  system = "aarch64-linux"
+}
+```
+
+Use `module.hetznercloud_nixos_image.id` as the server's `image`; see the
+[complete example](deployment/terraform/modules/hetznercloud/examples/basic),
+which creates a CAX11 server. To upload by hand instead, use
+[hcloud-upload-image](https://github.com/apricote/hcloud-upload-image) with the
+release URL:
+
+```sh
+export HCLOUD_TOKEN=...
+hcloud-upload-image upload \
+  --image-url https://github.com/nixos-contrib/nix-images/releases/download/<tag>/nixos-hetznercloud-aarch64-linux.raw.xz \
+  --compression xz \
+  --architecture arm \
+  --labels os=nixos
+```
+
+For the x86 image, use `nixos-hetznercloud-x86_64-linux.raw.xz` with
+`--architecture x86`. Then create a server from the snapshot with your SSH key:
+
+```sh
+hcloud server create --name nixos --type cax11 --image <snapshot-id> --ssh-key <key>
+```
+
+The image installs your SSH key for root, and sets the hostname and network
+config (including IPv6) from the server metadata with cloud-init. The root
+partition grows to fill the disk on first boot. On a CAX server, manage the
+system with:
+
+```sh
+nixos-rebuild switch --flake .#hetznercloud-aarch64-linux --target-host root@<ip>
+```
+
+Use `.#hetznercloud` for the x86_64 image.
 
 ## Oracle Cloud
 
@@ -102,6 +152,9 @@ Use `.#oraclecloud` for the x86_64 image.
 - DigitalOcean: networking, hostname and root SSH keys configured from the
   droplet metadata service. SSH with password login disabled, and the
   DigitalOcean monitoring agent (`do-agent`)
+- Hetzner Cloud: BIOS boot on x86 and UEFI boot on Arm, with root SSH keys,
+  hostname and network config applied by cloud-init. SSH with password login
+  disabled
 - Oracle Cloud: UEFI boot, serial console, NTP from the Oracle time service,
   and root SSH keys fetched from the instance metadata service
 
@@ -128,6 +181,7 @@ system:
 ```sh
 nix build .#digitalocean
 nix build .#packages.aarch64-linux.oraclecloud
+nix build .#packages.aarch64-linux.hetznercloud
 ```
 
 ## Releasing
