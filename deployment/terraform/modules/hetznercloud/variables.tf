@@ -13,7 +13,7 @@ variable "system" {
 variable "image_version" {
   description = "Release tag of nixos-contrib/nix-images to upload. Defaults to the release this module was published with."
   type        = string
-  default     = "v0.1.0" # x-release-please-version
+  default     = "v0.2.0" # x-release-please-version
   nullable    = false
 
   validation {
