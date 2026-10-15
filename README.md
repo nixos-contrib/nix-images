@@ -12,6 +12,11 @@ Run NixOS on DigitalOcean, Hetzner Cloud and Oracle Cloud without
 `nixos-infect`. Every release ships prebuilt NixOS images, plus Terraform
 modules that import them as custom images.
 
+> [!WARNING]
+> This project is a work in progress and has not been tested yet. Images and
+> Terraform modules may be broken, and interfaces may change without notice.
+> Don't use it for anything you can't afford to lose.
+
 ## Quick start
 
 ```hcl
