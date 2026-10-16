@@ -18,6 +18,11 @@
   # Public Cloud instances are x86_64 and boot with BIOS.
   image.efiSupport = false;
 
+  # OVHcloud recommends the QEMU guest agent, which the module's
+  # hw_qemu_guest_agent image property asks the hypervisor to use. It enables
+  # live snapshots.
+  services.qemuGuest.enable = true;
+
   # The uncompressed qcow2 is over GitHub's 2 GiB release asset limit.
   # Compressed qcow2 is still plain qcow2, so Glance accepts it as-is.
   system.build.image = lib.mkForce (
