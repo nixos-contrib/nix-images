@@ -8,8 +8,14 @@ resource "openstack_images_image_v2" "this" {
   visibility       = "private"
   tags             = var.tags
 
+  # Some of the properties OVHcloud recommends for uploaded images: the QEMU
+  # guest agent and the user that logs in. The disk bus is left at its virtio
+  # block default, matching the /dev/vda GRUB device the image is built with.
   properties = {
-    os_type   = "linux"
-    os_distro = "nixos"
+    os_type             = "linux"
+    os_distro           = "nixos"
+    distribution        = "nixos"
+    hw_qemu_guest_agent = "yes"
+    image_original_user = "root"
   }
 }

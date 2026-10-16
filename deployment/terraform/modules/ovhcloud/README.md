@@ -27,6 +27,12 @@ using the `openrc.sh` file from the OVHcloud control panel (**Public Cloud →
 Users & Roles**), which sets the `OS_*` environment variables. The image is
 x86_64 only, which covers every Public Cloud flavor except the Arm ones.
 
+The image is uploaded with some of the properties from OVHcloud's
+[upload your own image](https://docs.ovhcloud.com/en/guides/public-cloud/compute/upload-own-image)
+guide: the QEMU guest agent, and `root` as the login user. It keeps the default
+virtio block disk, not the guide's virtio SCSI, because the image installs GRUB
+to `/dev/vda`.
+
 Images belong to a single region, which the provider takes from
 `OS_REGION_NAME` in the `openrc.sh` file. Create instances in the same region
 as the image.
