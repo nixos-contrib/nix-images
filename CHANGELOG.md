@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.0](https://github.com/nixos-contrib/nix-images/compare/v0.3.0...v0.4.0) (2026-10-16)
+
+
+### Features
+
+* set OVHcloud's recommended image properties ([#10](https://github.com/nixos-contrib/nix-images/issues/10)) ([abad69f](https://github.com/nixos-contrib/nix-images/commit/abad69fb0a567cd6f554344c25698b5cd274fb4f))
+
 ## [0.3.0](https://github.com/nixos-contrib/nix-images/compare/v0.2.0...v0.3.0) (2026-10-16)
 
 
