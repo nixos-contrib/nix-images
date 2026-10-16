@@ -27,6 +27,10 @@ using the `openrc.sh` file from the OVHcloud control panel (**Public Cloud →
 Users & Roles**), which sets the `OS_*` environment variables. The image is
 x86_64 only, which covers every Public Cloud flavor except the Arm ones.
 
+Images belong to a single region, which the provider takes from
+`OS_REGION_NAME` in the `openrc.sh` file. Create instances in the same region
+as the image.
+
 On apply, the provider downloads the release image on the machine running
 Terraform, then uploads it to the project's image store. The machine needs
 enough temporary disk for the image.
