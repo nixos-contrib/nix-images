@@ -15,6 +15,10 @@
         {
           "type": "generic",
           "path": "deployment/terraform/modules/oraclecloud/variables.tf"
+        },
+        {
+          "type": "generic",
+          "path": "deployment/terraform/modules/ovhcloud/variables.tf"
         }
       ]
     }

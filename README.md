@@ -6,9 +6,10 @@
 [![DigitalOcean](https://img.shields.io/badge/DigitalOcean-custom%20image-0080FF?logo=digitalocean&logoColor=white)](deployment/terraform/modules/digitalocean)
 [![Hetzner Cloud](https://img.shields.io/badge/Hetzner%20Cloud-x86__64%20%7C%20Arm-D50C2D?logo=hetzner&logoColor=white)](deployment/terraform/modules/hetznercloud)
 [![Oracle Cloud](https://img.shields.io/badge/Oracle%20Cloud-x86__64%20%7C%20Arm-C74634?logo=oracle&logoColor=white)](deployment/terraform/modules/oraclecloud)
+[![OVHcloud](https://img.shields.io/badge/OVHcloud-x86__64-123F6D?logo=ovh&logoColor=white)](deployment/terraform/modules/ovhcloud)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-Run NixOS on DigitalOcean, Hetzner Cloud and Oracle Cloud without
+Run NixOS on DigitalOcean, Hetzner Cloud, Oracle Cloud and OVHcloud without
 `nixos-infect`. Every release ships prebuilt NixOS images, plus Terraform
 modules that import them as custom images.
 
@@ -150,6 +151,39 @@ nixos-rebuild switch --flake .#oraclecloud-aarch64-linux --target-host root@<ip>
 
 Use `.#oraclecloud` for the x86_64 image.
 
+## OVHcloud
+
+The OVHcloud image is built for `x86_64-linux` and runs on Public Cloud
+instances, which are OpenStack. The
+[ovhcloud module](deployment/terraform/modules/ovhcloud) uploads it to your
+project with the OpenStack provider:
+
+```hcl
+module "ovhcloud_nixos_image" {
+  source = "github.com/nixos-contrib/nix-images//deployment/terraform/modules/ovhcloud?ref=v0.1.0"
+}
+```
+
+Use `module.ovhcloud_nixos_image.id` as the instance's `image_id`; see the
+[complete example](deployment/terraform/modules/ovhcloud/examples/basic). To
+upload by hand instead, source the `openrc.sh` file of a Public Cloud user and
+use the OpenStack CLI with the release URL:
+
+```sh
+curl -fLO https://github.com/nixos-contrib/nix-images/releases/download/<tag>/nixos-ovhcloud-x86_64-linux.qcow2
+openstack image create nixos --disk-format qcow2 --container-format bare \
+  --file nixos-ovhcloud-x86_64-linux.qcow2
+```
+
+Then create an instance from the image with your SSH key, and `ssh root@<ip>`.
+The image boots with BIOS, gets its network config over DHCP, and installs your
+SSH key and hostname from the instance metadata. The root partition grows to
+fill the disk on first boot. Manage the system with:
+
+```sh
+nixos-rebuild switch --flake .#ovhcloud --target-host root@<ip>
+```
+
 ## What's in the images
 
 - NixOS 26.05 with flakes enabled, plus `git` and `vim`
@@ -162,6 +196,8 @@ Use `.#oraclecloud` for the x86_64 image.
   disabled
 - Oracle Cloud: UEFI boot, serial console, NTP from the Oracle time service,
   and root SSH keys fetched from the instance metadata service
+- OVHcloud: BIOS boot, serial console, and root SSH keys and hostname fetched
+  from the OpenStack metadata service
 
 ## Customizing
 
@@ -187,6 +223,7 @@ system:
 nix build .#digitalocean
 nix build .#packages.aarch64-linux.oraclecloud
 nix build .#packages.aarch64-linux.hetznercloud
+nix build .#ovhcloud
 ```
 
 ## Releasing
