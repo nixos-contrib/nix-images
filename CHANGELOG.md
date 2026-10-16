@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.0](https://github.com/nixos-contrib/nix-images/compare/v0.2.0...v0.3.0) (2026-10-16)
+
+
+### Features
+
+* add OVHcloud image and Terraform module ([#8](https://github.com/nixos-contrib/nix-images/issues/8)) ([3cd5ccf](https://github.com/nixos-contrib/nix-images/commit/3cd5ccfcfcb4e12cb48bc08882bda5f965627d98))
+
 ## [0.2.0](https://github.com/nixos-contrib/nix-images/compare/v0.1.0...v0.2.0) (2026-10-15)
 
 
