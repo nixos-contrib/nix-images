@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.4.0](https://github.com/nixos-contrib/nix-images/compare/v0.3.0...v0.4.0) (2026-11-07)
+
+
+### Features
+
+* set OVHcloud's recommended image properties ([#10](https://github.com/nixos-contrib/nix-images/issues/10)) ([abad69f](https://github.com/nixos-contrib/nix-images/commit/abad69fb0a567cd6f554344c25698b5cd274fb4f))
+
+
+### Bug Fixes
+
+* **ci:** merge with the App token so main gets its CI run ([#16](https://github.com/nixos-contrib/nix-images/issues/16)) ([7d1c7b3](https://github.com/nixos-contrib/nix-images/commit/7d1c7b30632ce1edb04411edb09f91c412d375cc))
+
 ## [0.3.0](https://github.com/nixos-contrib/nix-images/compare/v0.2.0...v0.3.0) (2026-10-16)
 
 
