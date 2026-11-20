@@ -1,7 +1,7 @@
-# nix-images
+# nixos-images
 
-[![CI](https://github.com/nixos-contrib/nix-images/actions/workflows/ci.yml/badge.svg)](https://github.com/nixos-contrib/nix-images/actions/workflows/ci.yml)
-[![Release](https://img.shields.io/github/v/release/nixos-contrib/nix-images)](https://github.com/nixos-contrib/nix-images/releases/latest)
+[![CI](https://github.com/nixos-contrib/nixos-images/actions/workflows/ci.yml/badge.svg)](https://github.com/nixos-contrib/nixos-images/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/nixos-contrib/nixos-images)](https://github.com/nixos-contrib/nixos-images/releases/latest)
 [![NixOS 26.05](https://img.shields.io/badge/NixOS-26.05-5277C3?logo=nixos&logoColor=white)](https://nixos.org)
 [![DigitalOcean](https://img.shields.io/badge/DigitalOcean-custom%20image-0080FF?logo=digitalocean&logoColor=white)](deployment/terraform/modules/digitalocean)
 [![Hetzner Cloud](https://img.shields.io/badge/Hetzner%20Cloud-x86__64%20%7C%20Arm-D50C2D?logo=hetzner&logoColor=white)](deployment/terraform/modules/hetznercloud)
@@ -22,7 +22,7 @@ modules that import them as custom images.
 
 ```hcl
 module "digitalocean_nixos_image" {
-  source = "github.com/nixos-contrib/nix-images//deployment/terraform/modules/digitalocean?ref=v0.1.0"
+  source = "github.com/nixos-contrib/nixos-images//deployment/terraform/modules/digitalocean?ref=v0.1.0"
 
   regions = ["fra1"]
 }
@@ -53,7 +53,7 @@ Not using Terraform? Upload the image through the DigitalOcean control panel or
 API, using its release URL:
 
 ```
-https://github.com/nixos-contrib/nix-images/releases/download/<tag>/nixos-digitalocean-x86_64-linux.qcow2.gz
+https://github.com/nixos-contrib/nixos-images/releases/download/<tag>/nixos-digitalocean-x86_64-linux.qcow2.gz
 ```
 
 Each release also has a `SHA256SUMS` file for checking the download.
@@ -68,7 +68,7 @@ image to a temporary server and saves it as a snapshot:
 
 ```hcl
 module "hetznercloud_nixos_image" {
-  source = "github.com/nixos-contrib/nix-images//deployment/terraform/modules/hetznercloud?ref=v0.1.0"
+  source = "github.com/nixos-contrib/nixos-images//deployment/terraform/modules/hetznercloud?ref=v0.1.0"
 
   system = "aarch64-linux"
 }
@@ -83,7 +83,7 @@ release URL:
 ```sh
 export HCLOUD_TOKEN=...
 hcloud-upload-image upload \
-  --image-url https://github.com/nixos-contrib/nix-images/releases/download/<tag>/nixos-hetznercloud-aarch64-linux.raw.xz \
+  --image-url https://github.com/nixos-contrib/nixos-images/releases/download/<tag>/nixos-hetznercloud-aarch64-linux.raw.xz \
   --compression xz \
   --architecture arm \
   --labels os=nixos
@@ -116,7 +116,7 @@ imports the image for you:
 
 ```hcl
 module "oraclecloud_nixos_image" {
-  source = "github.com/nixos-contrib/nix-images//deployment/terraform/modules/oraclecloud?ref=v0.1.0"
+  source = "github.com/nixos-contrib/nixos-images//deployment/terraform/modules/oraclecloud?ref=v0.1.0"
 
   compartment_id = var.compartment_id
   bucket         = "nixos-images"
@@ -130,8 +130,8 @@ which creates the network and an A1 instance. To import by hand instead, use
 the release URL:
 
 ```
-https://github.com/nixos-contrib/nix-images/releases/download/<tag>/nixos-oraclecloud-aarch64-linux.qcow2
-https://github.com/nixos-contrib/nix-images/releases/download/<tag>/nixos-oraclecloud-x86_64-linux.qcow2
+https://github.com/nixos-contrib/nixos-images/releases/download/<tag>/nixos-oraclecloud-aarch64-linux.qcow2
+https://github.com/nixos-contrib/nixos-images/releases/download/<tag>/nixos-oraclecloud-x86_64-linux.qcow2
 ```
 
 1. Upload the `.qcow2` to an Object Storage bucket.
@@ -160,7 +160,7 @@ project with the OpenStack provider:
 
 ```hcl
 module "ovhcloud_nixos_image" {
-  source = "github.com/nixos-contrib/nix-images//deployment/terraform/modules/ovhcloud?ref=v0.1.0"
+  source = "github.com/nixos-contrib/nixos-images//deployment/terraform/modules/ovhcloud?ref=v0.1.0"
 }
 ```
 
@@ -170,7 +170,7 @@ upload by hand instead, source the `openrc.sh` file of a Public Cloud user and
 use the OpenStack CLI with the release URL:
 
 ```sh
-curl -fLO https://github.com/nixos-contrib/nix-images/releases/download/<tag>/nixos-ovhcloud-x86_64-linux.qcow2
+curl -fLO https://github.com/nixos-contrib/nixos-images/releases/download/<tag>/nixos-ovhcloud-x86_64-linux.qcow2
 openstack image create nixos --disk-format qcow2 --container-format bare \
   --file nixos-ovhcloud-x86_64-linux.qcow2
 ```

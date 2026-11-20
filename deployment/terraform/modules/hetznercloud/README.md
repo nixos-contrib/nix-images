@@ -6,7 +6,7 @@ for a complete setup on an Arm (CAX) server.
 
 ```hcl
 module "hetznercloud_nixos_image" {
-  source = "github.com/nixos-contrib/nix-images//deployment/terraform/modules/hetznercloud?ref=v0.1.0"
+  source = "github.com/nixos-contrib/nixos-images//deployment/terraform/modules/hetznercloud?ref=v0.1.0"
 
   system = "aarch64-linux"
 }

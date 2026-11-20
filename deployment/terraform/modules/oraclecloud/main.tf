@@ -1,6 +1,6 @@
 locals {
   object_name = "nixos-oraclecloud-${var.system}-${var.image_version}.qcow2"
-  image_url   = "https://github.com/nixos-contrib/nix-images/releases/download/${var.image_version}/nixos-oraclecloud-${var.system}.qcow2"
+  image_url   = "https://github.com/nixos-contrib/nixos-images/releases/download/${var.image_version}/nixos-oraclecloud-${var.system}.qcow2"
 
   # Imported images aren't compatible with the Always Free shapes by default.
   default_shapes = {

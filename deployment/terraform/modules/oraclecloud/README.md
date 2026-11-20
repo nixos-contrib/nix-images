@@ -7,7 +7,7 @@ architecture. Instances are left to the caller; see
 
 ```hcl
 module "oraclecloud_nixos_image" {
-  source = "github.com/nixos-contrib/nix-images//deployment/terraform/modules/oraclecloud?ref=v0.1.0"
+  source = "github.com/nixos-contrib/nixos-images//deployment/terraform/modules/oraclecloud?ref=v0.1.0"
 
   compartment_id = var.compartment_id
   bucket         = "nixos-images"

@@ -6,7 +6,7 @@ Cloud project. Instances are left to the caller; see
 
 ```hcl
 module "ovhcloud_nixos_image" {
-  source = "github.com/nixos-contrib/nix-images//deployment/terraform/modules/ovhcloud?ref=v0.1.0"
+  source = "github.com/nixos-contrib/nixos-images//deployment/terraform/modules/ovhcloud?ref=v0.1.0"
 }
 
 resource "openstack_compute_instance_v2" "nixos" {

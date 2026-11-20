@@ -6,7 +6,7 @@ custom image. Droplets are left to the caller; see
 
 ```hcl
 module "digitalocean_nixos_image" {
-  source = "github.com/nixos-contrib/nix-images//deployment/terraform/modules/digitalocean?ref=v0.1.0"
+  source = "github.com/nixos-contrib/nixos-images//deployment/terraform/modules/digitalocean?ref=v0.1.0"
 
   regions = ["fra1"]
 }
